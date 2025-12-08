@@ -1,2 +1,84 @@
 \section{Requirements Engineering}
 
+\subsection{Stakeholders}
+
+Đối với hệ thống  Smart Event Reminder System (SERS), các stakeholder bao gồm:
+
+\begin{itemize}
+    \item User (người dùng): Người sử dụng SERS, dùng vào việc tạo và quản lý các sự kiện
+    \item Admin (quản trị viên): Người quản lý phần mềm hệ thống, các tài khoản user, và hệ cơ sở dữ liệu của hệ thống.
+    \item Project team (nhóm dự án): Chịu trách nhiệm thiết kế và phát triển hệ thống SERS.
+    \item Notification service (dịch vụ thông báo): Có nhiệm vụ gởi thông báo về các sự kiện đến user. 
+\end{itemize}
+
+\subsection{Functional Requirements \& Non-Functional 
+Requirements}
+
+\begin{enumerate}
+    \item Functional requirements:
+    \begin{itemize}
+        \item \textbf{FR-01:} Người dùng có thể tạo một sự kiện, với tiêu đề, mô tả, ngày giờ, địa điểm, tần suất lặp lại (mỗi ngày, mỗi tuần, mỗi tháng).
+        \item \textbf{FR-02:} Người dùng có thể thêm hoặc cập nhật các chi tiết của một sự kiện.
+        \item \textbf{FR-03:} Người dùng có thể xóa sự kiện bất kỳ.
+        \item \textbf{FR-04:} Người dùng có thể xem danh sách các sự kiện sắp tới.
+        \item \textbf{FR-05:} Người dùng sẽ nhận được thông báo nhắc nhở từ hệ thống trước khi sự kiện diễn ra (15 phút). 
+        \item \textbf{FR-06:} Cho phép người dùng tạo liên kết URL để chia sẻ sự kiện cho người dùng khác xem.
+    \end{itemize}
+
+    \item Non-functional requirements:
+    \begin{itemize}
+        \item \textbf{NFR-01:} Giao diện cần dễ hiểu, dễ sử dụng để cho một người dùng mới có thể nhanh chóng đăng nhập và tạo sự kiện mà không cần đọc hướng dẫn.
+        \item \textbf{NFR-02:} Hệ thống cần hiển thị danh sách các sự kiện trong vòng 1 giây khi người dùng có dưới 100 sự kiện trong database.
+        \item \textbf{NFR-03:} Dịch vụ thông báo cần gửi nhắc nhở đến người dùng 15 phút trước khi sự kiện bắt đầu, với tỉ lệ gửi thông báo thành công 99\%.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{User stories}
+
+\begin{itemize}
+    \item \textbf{US-01:} \emph{Là một} sinh viên, \emph{tôi muốn} \textbf{tạo} và \textbf{xem} danh sách hạn nộp bài tập sắp tới  \emph{để} sắp xếp thời gian học tập tốt hơn.
+    \item \textbf{US-02:} \emph{Là một} gia sư, \emph{tôi muốn} \textbf{nhận thông báo} kịp thời về các buổi dạy kèm \emph{để} không quên lịch dạy của tôi.
+    \item \textbf{US-04:} \emph{Là một} bệnh nhân, \emph{tôi muốn} có nhắc nhở \textbf{lặp lại} hằng tuần \emph{để} giúp tôi nhớ loại thuốc cần uống trong ngày.
+    \item \textbf{US-03:} \emph{Là một} thành viên câu lạc bộ, \emph{tôi muốn} \textbf{chia sẻ} sự kiện cá nhân cho bạn bè \emph{để} mọi người có thể biết đến thời gian và địa điểm của sự kiện và tham gia.
+    \item \textbf{US-05:} \emph{Là một} nhân viên văn phòng, \emph{tôi muốn} {đồng bộ} dữ liệu về sự kiện của mình trong hệ thống lên Google Calendar \emph{để} xem lịch tiện lợi hơn
+\end{itemize}
+
+
+\subsection{Acceptance criteria \& MoSCoW}
+
+Dựa theo phương pháp MoSCoW \cite{gfg_moscow_2025}, ta xếp loại độ ưu tiên các user story thành 1 trong 4 nhóm: Must have, Should have, Could have, Won't have.
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{|p{1.2cm}|p{3.2cm}|p{2.2cm}|X|}
+\hline
+\textbf{ID} & \textbf{User Story} & \textbf{MoSCoW} & \textbf{Acceptance Criteria} \\ \hline
+
+US-01 & Tạo và xem danh sách bài tập (Sinh viên) & Must Have &
+(1) Hệ thống hiển thị form nhập liệu với các trường: Tiêu đề, Mô tả, Ngày giờ, Địa điểm.  
+(2) Nút ``Lưu'' bị vô hiệu hóa hoặc báo lỗi nếu bỏ trống trường ``Tiêu đề'' hoặc ``Ngày giờ''.  
+(3) Sau khi lưu thành công, sự kiện mới phải xuất hiện ngay lập tức trong danh sách ``Sắp tới''.  
+(4) Ngày giờ của sự kiện phải là một thời điểm trong tương lai. \\ \hline
+
+US-02 & Nhận thông báo dạy kèm (Gia sư) & Must Have &
+(1) Hệ thống gửi thông báo đúng 15 phút trước giờ sự kiện.  
+(2) Nội dung thông báo hiển thị đúng tiêu đề của sự kiện.  
+(3) Nếu người dùng đang offline, thông báo hiển thị khi họ đăng nhập lại. \\ \hline
+
+US-04 & Nhắc nhở lặp lại uống thuốc (Bệnh nhân) & Should Have &
+(1) Trong form tạo sự kiện có tùy chọn ``Lặp lại'': Hàng ngày, Hàng tuần.  
+(2) Nếu chọn ``Hàng tuần'', hệ thống tự động tạo các bản sao sự kiện vào cùng giờ các ngày tiếp theo.  
+(3) Khi xóa một sự kiện lặp lại, hệ thống hỏi người dùng muốn xóa ``Chỉ sự kiện này'' hay ``Tất cả chuỗi''. \\ \hline
+
+US-03 & Chia sẻ sự kiện (Thành viên CLB) & Could Have &
+(1) Màn hình chi tiết sự kiện có nút ``Chia sẻ'' hoặc ``Get Link''.  
+(2) Hệ thống sinh ra URL duy nhất (ví dụ: sers.com/share/xyz123).  
+(3) Khi truy cập URL không cần đăng nhập, người xem thấy Tiêu đề, Thời gian, Địa điểm (Read-only). \\ \hline
+
+US-05 & Đồng bộ Google Calendar (Nhân viên VP) & Won't Have &
+(1) Người dùng thấy nút ``Sync to Google''.  
+(2) Hệ thống yêu cầu quyền truy cập (Mockup OAuth).  
+(3) Sự kiện được gửi thành công đến API giả lập và trả về trạng thái ``Synced''. \\ \hline
+
+\end{tabularx}
+\end{table}
