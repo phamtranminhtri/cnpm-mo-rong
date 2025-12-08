@@ -1,2 +1,62 @@
 \section{Process Model and Planning}
 
+Nhóm quyết định lựa chọn mô hình Scrum để phát triển hệ thống SERS.
+
+Lý do lựa chọn:
+\begin{itemize}
+    \item Scrum phù hợp với nhóm 5 thành viên, giúp tăng cường giao tiếp và tính minh bạch thông qua các sự kiện Daily Scrum (dù là online hay offline).
+    \item Thời gian phát triển ngắn (vài tuần) đòi hỏi khả năng phản hồi, thích ứng nhanh với các thay đổi. Việc chia nhỏ dự án thành các Sprint 1 tuần giúp nhóm kiểm soát tiến độ tốt hơn so với mô hình Waterfall.
+    \item Hệ thống được định nghĩa dựa trên các User Stories (như đã phân tích ở phần Requirements), tương thích với Product Backlog của Scrum.
+\end{itemize}
+
+% \subsection{Project Planning}
+Dự án kéo dài 2 tuần, được chia làm 2 Sprints.
+\begin{itemize}
+    \item \textbf{Sprint 1 (Tuần 1):} Tập trung vào các tính năng cốt lõi (Core Features) - MVP.
+    \item \textbf{Sprint 2 (Tuần 2):} Hoàn thiện các tính năng nâng cao, Notification và Refactoring.
+\end{itemize}
+
+\subsection{Product Backlog \& Planning Poker Estimation}
+Nhóm sử dụng kỹ thuật Planning Poker \cite{mgs_planning-poker_2025} để ước lượng độ phức tạp (Effort) cho từng User Story theo dãy số Fibonacci (0, 1, 2, 3, 5, 8, 13, 21).
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|p{8cm}|c|c|}
+\hline
+\textbf{ID} & \textbf{User Story} & \textbf{Priority} & \textbf{Story Points} \\ \hline
+US-01 & Sinh viên tạo và xem danh sách sự kiện (CRUD) & Must Have & 8 \\ \hline
+US-02 & Gia sư nhận thông báo nhắc nhở (Notification) & Must Have & 8 \\ \hline
+US-04 & Bệnh nhân tạo nhắc nhở lặp lại (Recurring Events) & Should Have & 5 \\ \hline
+US-03 & Chia sẻ sự kiện qua URL (Sharing) & Could Have & 3 \\ \hline
+US-05 & Đồng bộ Google Calendar & Won't Have & - \\ \hline
+\multicolumn{3}{|r|}{\textbf{Total Points}} & \textbf{24} \\ \hline
+\end{tabular}
+\caption{Product Backlog với ước lượng điểm}
+\end{table}
+
+\subsection{Sprint Backlogs}
+
+\subsubsection*{Sprint 1: Core Mechanics (Velocity dự kiến: 13 points)}
+\textbf{Mục tiêu:} Người dùng có thể tạo, lưu trữ và xem danh sách sự kiện.
+\begin{itemize}
+    \item \textbf{US-01 (8 points):} Thiết kế Database (Mock), API thêm/xóa/sửa sự kiện, Giao diện danh sách.
+    \item \textbf{Part of US-04 (5 points):} Xử lý logic lặp lại cơ bản (Backend logic).
+\end{itemize}
+
+\subsubsection*{Sprint 2: Notification \& Polish (Velocity dự kiến: 11 points)}
+\textbf{Mục tiêu:} Hoàn thiện hệ thống nhắc nhở và tính năng chia sẻ.
+\begin{itemize}
+    \item \textbf{US-02 (8 points):} Cài đặt Background Service kiểm tra giờ và gửi thông báo (Console log/Popup).
+    \item \textbf{US-03 (3 points):} Tạo trang xem sự kiện public (Read-only view).
+    \item \textbf{Testing \& Documentation:} Viết test case và hoàn thiện báo cáo.
+\end{itemize}
+
+\subsection{Burndown Chart (Simulated)}
+Biểu đồ Burndown \cite{projectmanager_burndown_2025} dự kiến cho thấy sự giảm dần của Story Points qua 14 ngày.
+% Bạn có thể chèn hình ảnh biểu đồ tự vẽ vào đây
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{image/burndown.png}
+    \caption{Burndown Chart cho 2 Sprints}
+    \label{fig:burndown}
+\end{figure}
