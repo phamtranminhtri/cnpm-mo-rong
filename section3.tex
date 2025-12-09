@@ -20,7 +20,23 @@ Bên dưới là sơ đồ tuần tự cho usecase người dùng thêm một s�
 
 \subsection{State diagram}
 
-Sau đây là State diagram thể hiện vòng đời của một sự kiện. Một sự kiện có 3 trạng thái (state) là \textbf{Created}, \textbf{Scheduled}, \textbf{Notified}.
+Sau đây là State diagram thể hiện vòng đời của một sự kiện. Một sự kiện có 5 trạng thái (state) là \textbf{Created}, \textbf{Scheduled}, \textbf{Notified}, và \textbf{Completed / Cancelled} - tương ứng với \textbf{Final State}.
+
+Ban đầu, khi một sự kiện được tạo thành công bởi người dùng, sẽ bao gồm nhiều thông tin, như là tiêu đề, thời gian, địa điểm, tần suất, ... (Created State) .  Khi người dùng chọn điều chỉnh các thông tin của sự kiện tương ứng, hệ thống sẽ cho phép đổi các thông tin đó, nhưng vẫn giữ đối tượng tương ứng.
+
+Sau khi người dùng tạo sự kiện thành công, hệ thống sẽ tự chuyển đổi sự kiện sang dạng chờ để nhắc hẹn (Scheduled State), dựa trên thời gian đã đặt lịch sẵn. Khi sự kiện sắp tới thời gian bắt đầu, hệ thống sẽ tự động thiết lập thông báo cho người dùng Notified State.
+
+Sau khi sự kiện kết thúc, sẽ có hai luồng xử lý chính:
+\begin{itemize}
+    \item Nếu sự kiện vẫn còn tồn tại các phiên bản lặp lại trong tương lai, sự kiện sẽ được chuyển về ngược lại trạng thái chờ để nhắc hẹn (Scheduled State).
+    \item Nếu sự kiện đã hết thời hạn, sự kiện này sẽ được chuyển sang trạng thái kết thúc (Completed State - tương ứng với Final State).
+\end{itemize}    
+
+Một tính năng quan trọng mà hệ thống cung cấp cho người dùng là khả năng xóa các sự kiện. Hệ thống có hai luồng xử lý chính:
+\begin{itemize}
+    \item Nếu người dùng chỉ xóa một sự kiện trong nhiều sự kiện còn lại, sự kiện sẽ được reset lại về trạng thái chờ nhắc hẹn, với thời gian phù hợp (Scheduled State).
+    \item Nếu người dùng xóa sự kiện duy nhất còn lại - tức là cuối cùng, hoặc tất cả chuỗi sự kiện còn lại từ thời điểm hiện tại, sự kiện này sẽ được cho kết thúc, về sang trạng thái Cancelled State - tương ứng với Final State.
+\end{itemize}  
 
 \begin{figure}[H]
     \centering
@@ -29,7 +45,7 @@ Sau đây là State diagram thể hiện vòng đời của một sự kiện. M
     \label{fig:state}
 \end{figure}
 
-
+\newpage
 
 \subsection{Class diagram}
 
