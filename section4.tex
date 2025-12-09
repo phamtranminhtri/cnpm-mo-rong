@@ -1,2 +1,28 @@
 \section{Architecture Design}
+Vì mục tiêu của nhóm chỉ là xây dựng một ứng dụng nhắc lịch sự kiện chạy cục bộ (local) với quy mô nhỏ và đơn giản, nhóm quyết định lựa chọn \textbf{Kiến trúc Phân lớp (Layered Architecture)} cho phần mềm SERS. Mô hình này chia ứng dụng thành các lớp riêng biệt, mỗi lớp đảm nhận một trách nhiệm cụ thể, giúp mã nguồn rõ ràng và dễ bảo trì. Dưới đây là architecture diagram của phần mềm:
+
+
+
+Kiến trúc của SERS bao gồm 3 lớp chính là \textbf{Lớp Giao diện}, \textbf{Lớp Nghiệp vụ}, \textbf{Lớp truy cập dữ liệu}. Vai trò của từng lớp như sau:
+\begin{itemize}
+    \item \textbf{Presentation Layer (Lớp Giao diện):} Đây là lớp tương tác trực tiếp với người dùng. Nhiệm vụ của nó là hiển thị lịch và các sự kiện, các form nhập liệu và các thông báo nhắc nhở (notification). Lớp này nhận yêu cầu từ người dùng và chuyển xuống lớp nghiệp vụ để xử lý, sau đó hiển thị kết quả trả về.
+    \item \textbf{Business Logic Layer (Lớp Nghiệp vụ):} Đây là "bộ não" của ứng dụng. Lớp này chứa các logic cốt lõi như: tính toán thời gian nhắc nhở, xử lý logic thêm/sửa/xóa sự kiện, và kích hoạt cơ chế thông báo khi đến giờ. Nó không quan tâm dữ liệu được lưu trữ như thế nào hay hiển thị ra sao.
+    \item \textbf{Data Access Layer (Lớp Truy cập Dữ liệu):} Lớp này chịu trách nhiệm giao tiếp với cơ sở dữ liệu cục bộ (ví dụ: SQLite hoặc file JSON/XML). Nhiệm vụ của nó là thực hiện các thao tác đọc, ghi, truy vấn dữ liệu sự kiện và cấu hình người dùng một cách an toàn và chính xác.
+\end{itemize}
+
+Với kiến trúc 3 lớp như trên, luồng dữ liệu trong SERS sẽ tuân theo quy tắc gọi từ trên xuống (Top-down) quen thuộc:
+\begin{enumerate}
+    \item Người dùng thao tác trên GUI (ví dụ: tạo một sự kiện mới).
+    \item \textbf{Presentation Layer} thu thập dữ liệu đầu vào và gửi yêu cầu xuống \textbf{Business Logic Layer}.
+    \item \textbf{Business Logic Layer} kiểm tra tính hợp lệ của dữ liệu (validate) và thực hiện các xử lý nghiệp vụ cần thiết.
+    \item Nếu dữ liệu hợp lệ, yêu cầu lưu trữ được chuyển xuống \textbf{Data Access Layer}.
+    \item \textbf{Data Access Layer} thực hiện ghi dữ liệu vào bộ nhớ cục bộ và trả về kết quả thành công/thất bại ngược lên trên theo chuỗi gọi để thông báo cho người dùng.
+\end{enumerate}
+
+Nhóm quyết định chọn kiến trúc phân lớp (Layered Architecture) vì 3 lý do chính sau:
+\begin{itemize}
+    \item \textbf{Sự đơn giản (Simplicity):} Với mục tiêu là phần mềm chạy local đơn giản, kiến trúc này dễ triển khai và không đòi hỏi cấu hình phức tạp như Microservices.
+    \item \textbf{Phân tách trách nhiệm (Separation of Concerns):} Việc tách biệt giao diện, logic và dữ liệu giúp việc phát triển và sửa lỗi dễ dàng hơn.
+    \item \textbf{Dễ dàng kiểm thử (Testability):} Có thể kiểm thử riêng biệt lớp nghiệp vụ mà không cần phụ thuộc vào giao diện người dùng.
+\end{itemize}
 
