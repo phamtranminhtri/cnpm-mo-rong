@@ -1,2 +1,52 @@
 \section{System Modeling}
 
+\subsection{Sequence diagram}
+
+Bên dưới là sơ đồ tuần tự cho usecase người dùng thêm một sự kiện mới vào lịch. Khi đó, phần mềm sẽ hiển thị biểu mẫu cho người dùng nhập thông tin, sau đó tiến hành tạo nhắc lịch và lưu thông tin sự kiện, cụ thể như sau:
+
+\begin{itemize}
+    \item Khi người dùng nhấn vào ứng dụng, ứng dụng sẽ truy xuất và hiển thị lịch biểu cũng như các sự kiện có trong lịch biểu đó. Người dùng cũng có thể lựa chọn chuyển lịch biểu sang tuần khác tùy theo nhu cầu của họ.
+    \item Khi ở giao diện hiển thị lịch, nếu người dùng muốn tạo một sự kiện mới, người dùng sẽ nhấn vào ngày muốn tạo. Khi đó, ứng dụng sẽ hiển thị ra biểu mẫu điền thông tin sự kiện, bao gồm các thông tin như: Tiêu đề, thời gian, địa điểm, tần suất....
+    \item Sau khi người dùng nhập thông tin và nhấn "Lưu", ứng dụng sẽ lấy thông tin đó để tạo Alarm và đồng thời cũng sẽ lưu thông tin sự kiện vào database.
+    \item Cuối cùng, người dùng sẽ nhận được hiển thị "Thêm sự kiện thành công" và chuyển về giao diện lịch biểu ban đầu.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{image/sequence.png}
+    \caption{Sequence diagram Thêm sự kiện vào lịch}
+    \label{fig:sequence}
+\end{figure}
+
+\subsection{State diagram}
+
+Sau đây là State diagram thể hiện vòng đời của một sự kiện. Một sự kiện có 3 trạng thái (state) là \textbf{Created}, \textbf{Scheduled}, \textbf{Notified}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{image/state.png}
+    \caption{State diagram của sự kiện}
+    \label{fig:state}
+\end{figure}
+
+
+
+\subsection{Class diagram}
+
+Cuối cùng, đây là class diagram cho phần mềm SERS. Diagram gồm 6 class sau:
+
+\begin{itemize}
+    \item \textbf{Event}: Chứa các thông tin về sự kiện như tiêu đề, thời gian, mô tả. Event sẽ được lưu trữ trong database và chỉ lưu trữ 1 lần đối với 1 sự kiện (kể cả sự kiện đó có tính lặp lại). Việc xử lý quy tắc lặp lại của event sẽ do class bên dưới đảm nhận.
+    \item \textbf{Recurrence}: Mô tả quy tắc lặp lại của một Event. Tùy vào việc Event có lặp lại hay không, Event sẽ chứa Recurrence tương ứng.
+    \item \textbf{EventRepository}: Lưu trữ danh sách các event vào database và cung cấp nó cho ứng dụng. Class scheduler sẽ tiến hành lấy danh sách các sự kiện từ EventRepository này.
+    \item \textbf{Scheduler}: Tính toán và tạo lịch nhắc dựa trên Event và Recurrence. Thông qua logic của các hàm, schedluer sẽ tạo ra các Reminder để tiến hành nhắc nhở.
+    \item \textbf{Reminder}: Đại diện cho một nhắc nhở của event. Khi tới giờ cần nhắc nhở, nó sẽ tự động gọi notification để gửi thông báo đến người dùng.
+    \item \textbf{Notification}: Đây là phần chịu trách nhiệm hiển thị thông báo cho người dùng.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{image/class.png}
+    \caption{Class diagram}
+    \label{fig:class}
+\end{figure}
