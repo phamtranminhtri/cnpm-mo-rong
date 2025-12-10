@@ -1,7 +1,12 @@
 \section{Architecture Design}
 Vì mục tiêu của nhóm chỉ là xây dựng một ứng dụng nhắc lịch sự kiện chạy cục bộ (local) với quy mô nhỏ và đơn giản, nhóm quyết định lựa chọn \textbf{Kiến trúc Phân lớp (Layered Architecture)} cho phần mềm SERS. Mô hình này chia ứng dụng thành các lớp riêng biệt, mỗi lớp đảm nhận một trách nhiệm cụ thể, giúp mã nguồn rõ ràng và dễ bảo trì. Dưới đây là architecture diagram của phần mềm:
 
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{image/component.png}
+    \caption{Component diagram}
+    \label{fig:component}
+\end{figure}
 
 Kiến trúc của SERS bao gồm 3 lớp chính là \textbf{Lớp Giao diện}, \textbf{Lớp Nghiệp vụ}, \textbf{Lớp truy cập dữ liệu}. Vai trò của từng lớp như sau:
 \begin{itemize}
