@@ -1,2 +1,102 @@
 \section{Software Testing and Quality Assurance}
 
+\subsection{Testing Strategy}
+Mục tiêu của hoạt động kiểm thử là xác nhận các chức năng cốt lõi của hệ thống SERS hoạt động đúng với yêu cầu đã đặc tả, đặc biệt là các chức năng liên quan đến tạo sự kiện, kiểm tra dữ liệu đầu vào, xử lý sự kiện lặp và cơ chế nhắc nhở.
+
+Do giới hạn về thời gian và phạm vi của dự án học phần, nhóm áp dụng chiến lược kiểm thử thủ công (manual testing) theo phương pháp \textbf{black-box testing}, tập trung vào hành vi của hệ thống từ góc nhìn người dùng cuối.
+
+\subsection{Test Plan}
+\begin{itemize}
+    \item \textbf{Test level}: System testing
+    \item \textbf{Test method}: Black-box testing
+    \item \textbf{Test environment}: Localhost (Frontend: React, Backend: Node.js + SQLite)
+    \item \textbf{Scope}: Event creation, input validation, recurring events, delete logic
+\end{itemize}
+
+\subsection{Test Cases and Evidence}
+
+\subsubsection{TC1 – Initial System State (Empty Event List)}
+\textbf{Mô tả}: Kiểm tra trạng thái hệ thống khi chưa có sự kiện nào được tạo.  
+\textbf{Kết quả mong đợi}: Hệ thống hiển thị thông báo chưa có sự kiện và hướng dẫn người dùng tạo sự kiện đầu tiên.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{image/test_tc1_empty_state.png}
+    \caption{TC1 – Giao diện hệ thống khi chưa có sự kiện}
+    \label{fig:tc1_empty}
+\end{figure}
+
+\textbf{Đánh giá}: Kết quả đạt yêu cầu. Giao diện hiển thị rõ ràng trạng thái rỗng, cải thiện trải nghiệm người dùng.
+
+---
+
+\subsubsection{TC2 – Create Event with Invalid Start Time}
+\textbf{Mô tả}: Người dùng nhập thời gian bắt đầu trong quá khứ.  
+\textbf{Kết quả mong đợi}: Hệ thống từ chối dữ liệu và hiển thị thông báo lỗi.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{image/test_tc2_invalid_start_time.png}
+    \caption{TC2 – Validation lỗi khi thời gian bắt đầu không hợp lệ}
+    \label{fig:tc2_invalid_time}
+\end{figure}
+
+\textbf{Đánh giá}: Validation phía client hoạt động chính xác, ngăn chặn dữ liệu không hợp lệ trước khi gửi lên backend.
+
+---
+
+\subsubsection{TC3 – Create Event with Valid Data}
+\textbf{Mô tả}: Người dùng nhập đầy đủ thông tin hợp lệ để tạo sự kiện.  
+\textbf{Kết quả mong đợi}: Sự kiện được tạo thành công và hiển thị trong danh sách sự kiện sắp tới.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{image/test_tc3_create_event_form.png}
+    \caption{TC3 – Form tạo sự kiện với dữ liệu hợp lệ}
+    \label{fig:tc3_form}
+\end{figure}
+
+\textbf{Đánh giá}: Hệ thống xử lý đúng yêu cầu, không phát sinh lỗi trong quá trình tạo sự kiện.
+
+---
+
+\subsubsection{TC4 – Display of Recurring Events}
+\textbf{Mô tả}: Kiểm tra việc hiển thị danh sách các sự kiện lặp sau khi tạo.  
+\textbf{Kết quả mong đợi}: Các instance của sự kiện lặp được hiển thị đầy đủ và nhất quán trong danh sách.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{image/test_tc4_recurring_events.png}
+    \caption{TC4 – Danh sách các sự kiện lặp được tạo tự động}
+    \label{fig:tc4_recurring}
+\end{figure}
+
+\textbf{Đánh giá}: Logic xử lý recurring events hoạt động đúng, hệ thống tạo nhiều instance phù hợp với tần suất lặp đã cấu hình.
+
+---
+
+\subsubsection{TC5 – Delete Recurring Event}
+\textbf{Mô tả}: Người dùng thực hiện xóa một sự kiện thuộc chuỗi lặp.  
+\textbf{Kết quả mong đợi}: Hệ thống hiển thị hộp thoại xác nhận cho phép xóa một instance hoặc toàn bộ chuỗi.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{image/test_tc5_delete_recurring_modal.png}
+    \caption{TC5 – Hộp thoại xác nhận xóa sự kiện lặp}
+    \label{fig:tc5_delete}
+\end{figure}
+
+\textbf{Đánh giá}: Cơ chế xác nhận hoạt động đúng, giúp tránh thao tác nhầm lẫn và tăng tính an toàn dữ liệu.
+
+---
+
+\subsection{Testing Summary}
+Tất cả các test case đã được thực hiện đều cho kết quả đúng với mong đợi. Hệ thống thể hiện khả năng xử lý tốt các tình huống hợp lệ và không hợp lệ, đồng thời cung cấp phản hồi rõ ràng cho người dùng thông qua giao diện.
+
+\subsection{Quality Improvement Opportunities}
+Mặc dù hệ thống đã hoạt động ổn định trong môi trường kiểm thử, nhóm xác định một số hướng cải thiện trong tương lai:
+\begin{itemize}
+    \item Bổ sung unit tests và integration tests cho backend services.
+    \item Tự động hóa kiểm thử với các công cụ như Jest hoặc Cypress.
+    \item Thực hiện kiểm thử tải (performance testing) cho scheduler khi số lượng sự kiện lớn.
+\end{itemize}

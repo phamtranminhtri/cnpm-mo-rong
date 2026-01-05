@@ -1,2 +1,65 @@
 \section{Implementation and Code Quality}
 
+\subsection{Overall Implementation}
+Hệ thống Smart Event Reminder System (SERS) đã được triển khai dưới dạng một ứng dụng hoàn chỉnh theo mô hình client--server, bao gồm backend và frontend tách biệt rõ ràng.
+
+Backend được xây dựng bằng Node.js với Express framework, sử dụng SQLite làm hệ quản trị cơ sở dữ liệu. Frontend được phát triển bằng React (Create React App), giao tiếp với backend thông qua RESTful APIs sử dụng Axios. Cơ chế nhắc nhở và gửi thông báo được hiện thực bằng \texttt{node-cron} kết hợp với Web Notifications phía client.
+
+Kiến trúc triển khai tuân thủ mô hình phân lớp và phân tách trách nhiệm rõ ràng:
+\begin{itemize}
+    \item \textbf{Models}: biểu diễn các thực thể nghiệp vụ (Event, Reminder, Notification).
+    \item \textbf{Repositories}: tầng truy cập dữ liệu, đóng gói các truy vấn SQLite.
+    \item \textbf{Services}: xử lý logic nghiệp vụ chính (event orchestration, reminder scheduling, notification sending).
+    \item \textbf{Controllers \& Routes}: cung cấp REST APIs cho frontend.
+\end{itemize}
+
+\subsection{Backend Implementation}
+
+\subsubsection{Core Domain Models}
+Hệ thống sử dụng các domain models chính:
+\begin{itemize}
+    \item \texttt{Event}: lưu trữ thông tin sự kiện, hỗ trợ sự kiện lặp (recurring events) với các thuộc tính như \texttt{recurrence\_type}, \texttt{parent\_event\_id}.
+    \item \texttt{Reminder}: đại diện cho các mốc nhắc nhở gắn với sự kiện.
+    \item \texttt{Notification}: ghi nhận lịch sử các thông báo đã gửi.
+\end{itemize}
+
+Mỗi model đều có cơ chế kiểm tra dữ liệu hợp lệ (validation) nhằm đảm bảo tính toàn vẹn nghiệp vụ, ví dụ kiểm tra tiêu đề không rỗng, thời gian bắt đầu nằm trong tương lai, hoặc kiểu lặp hợp lệ.
+
+\subsubsection{Business Logic and Scheduling}
+Tầng nghiệp vụ được tổ chức xoay quanh các service chính:
+\begin{itemize}
+    \item \texttt{EventService}: điều phối toàn bộ vòng đời sự kiện (create, update, delete), tự động tạo reminder và xử lý các chuỗi sự kiện lặp.
+    \item \texttt{ReminderService}: truy vấn các reminder sắp đến hạn và cập nhật trạng thái sau khi gửi.
+    \item \texttt{NotificationService}: gửi và ghi nhận thông báo, đồng thời cung cấp hàm được scheduler gọi định kỳ.
+    \item \texttt{SchedulerService}: sử dụng \texttt{node-cron} để chạy tác vụ kiểm tra reminder mỗi phút.
+\end{itemize}
+
+Cách tổ chức này giúp hệ thống dễ mở rộng và dễ thay thế các thành phần (ví dụ chuyển sang message queue trong môi trường production).
+
+\subsection{Frontend Implementation}
+Frontend cung cấp giao diện trực quan cho người dùng để:
+\begin{itemize}
+    \item Tạo và chỉnh sửa sự kiện (bao gồm sự kiện lặp).
+    \item Xem danh sách các sự kiện sắp tới.
+    \item Thử gửi thông báo nhắc nhở.
+\end{itemize}
+
+\texttt{EventForm} chịu trách nhiệm validate dữ liệu phía client trước khi gửi API request, trong khi \texttt{EventList} hiển thị danh sách sự kiện và các thao tác chỉnh sửa/xóa. Giao diện hỗ trợ xác nhận xóa toàn bộ chuỗi sự kiện lặp để tránh lỗi thao tác.
+
+\subsection{Code Quality Practices}
+Các thực hành chất lượng mã nguồn được áp dụng:
+\begin{itemize}
+    \item Phân tách rõ ràng giữa logic nghiệp vụ và giao diện.
+    \item Đặt tên biến và hàm nhất quán, có ý nghĩa.
+    \item Tránh logic trùng lặp thông qua các service dùng chung.
+    \item Kiểm tra dữ liệu đầu vào ở cả frontend và backend.
+\end{itemize}
+
+\subsection{Code Inspection and Refactoring}
+Qua quá trình review mã nguồn, nhóm xác định một số code smells:
+\begin{itemize}
+    \item \textbf{Long Service Methods}: một số hàm trong \texttt{EventService} xử lý nhiều bước.
+    \item \textbf{Missing Automated Tests}: hiện tại chưa có unit test và integration test.
+\end{itemize}
+
+Giải pháp refactor được đề xuất là tách nhỏ các hàm nghiệp vụ, đồng thời bổ sung test tự động để tăng độ tin cậy và khả năng bảo trì.
